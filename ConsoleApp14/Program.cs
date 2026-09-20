@@ -5,5 +5,10 @@
         static void Main(string[] args)
         {
         }
+
+        static void PrintInfo()
+        {
+
+        }
     }
 }
