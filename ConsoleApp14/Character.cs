@@ -4,14 +4,12 @@ namespace ConsoleApp14
 {
     internal class Character
     {
-        public Character(string name, float currentHealth, int fullHealth, int xp, float damage, int lvl)
+        public Character(string name, float currentHealth, int fullHealth, float damage)
         {
             Name = name;
             CurrentHealth = currentHealth;
             FullHealth = fullHealth;
-            XP = xp;
             Damage = damage;
-            Lvl = lvl;
         }
         public string Name { get; set; }
 
@@ -24,5 +22,7 @@ namespace ConsoleApp14
         public float Damage { get; set; }
 
         public int Lvl { get; set; }
+
+        public int Currency { get; set; }
     }
 }
