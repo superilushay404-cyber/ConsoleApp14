@@ -97,12 +97,14 @@
                                 if (findedDamagedCharacter.CurrentHealth > findedDamager.Damage)
                                 {
                                     findedDamagedCharacter.CurrentHealth -= findedDamager.Damage;
+                                    findedDamager.XP += (int)findedDamager.Damage;
                                     Console.WriteLine("Success");
                                 }
                                 else if (findedDamagedCharacter.CurrentHealth <= findedDamager.Damage)
                                 {
                                     findedDamagedCharacter.CurrentHealth = 0;
                                     findedDamagedCharacter.IsAlive = false;
+                                    findedDamager.XP += (int)findedDamagedCharacter.CurrentHealth;
 
                                     Console.WriteLine($"\"{findedDamagedCharacter.Name}\" has died after getting damaged");
                                 }
