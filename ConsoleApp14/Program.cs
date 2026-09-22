@@ -1,4 +1,5 @@
 ﻿using System;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ConsoleApp14
 {
@@ -38,40 +39,52 @@ namespace ConsoleApp14
                             Console.WriteLine("Please input max health");
                             bool isMaxHealthParseSuccess = float.TryParse(Console.ReadLine(), out float maxHealth);
 
-                            if (isMaxHealthParseSuccess)
+                            if (isMaxHealthParseSuccess && maxHealth > 0)
                             {
                                 Console.WriteLine("Please input current health");
                                 bool isParseCurrentHealthSuccess = float.TryParse(Console.ReadLine(), out float currentHealth);
 
-                                if (isParseCurrentHealthSuccess && maxHealth >= currentHealth)
+                                if (isParseCurrentHealthSuccess && maxHealth >= currentHealth && currentHealth > 0)
                                 {
                                     Console.WriteLine("Please input damage");
                                     bool isParseDamageSuccess = float.TryParse(Console.ReadLine(), out float damage);
 
-                                    if (isParseDamageSuccess)
+                                    if (isParseDamageSuccess && damage > 0)
                                     {
                                         Character character = new Character(nameOfCharacter, currentHealth, maxHealth, damage);
                                         characters.Add(character);
 
                                         Console.WriteLine("Success");
                                     }
-                                    else
+                                    else if (!isParseDamageSuccess)
                                     {
                                         Console.WriteLine("Input is not a number");
+                                    }
+                                    else if (damage <= 0)
+                                    {
+                                        Console.WriteLine("Damage cant be 0 or lower");
                                     }
                                 }
                                 else if (!isParseCurrentHealthSuccess)
                                 {
                                     Console.WriteLine("Input is not a number");
                                 }
+                                else if (currentHealth <= 0)
+                                {
+                                    Console.WriteLine("Current health cant be 0 or lower");
+                                }
                                 else if (maxHealth < currentHealth)
                                 {
                                     Console.WriteLine("Max health cant be lower than current health");
                                 }
                             }
-                            else
+                            else if (!isMaxHealthParseSuccess)
                             {
                                 Console.WriteLine("Input is not a number");
+                            }
+                            else if (maxHealth <= 0)
+                            {
+                                Console.WriteLine("Max health cant be 0 or lower");
                             }
                         }
                     }
