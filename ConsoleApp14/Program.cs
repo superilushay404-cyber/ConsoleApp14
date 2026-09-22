@@ -1,4 +1,6 @@
-﻿namespace ConsoleApp14
+﻿using System;
+
+namespace ConsoleApp14
 {
     internal class Program
     {
@@ -203,6 +205,39 @@
                         Console.WriteLine("There is no characters to heal");
                     }
                 }
+                else if (userInput == 5)
+                {
+                    if (characters.Count > 0)
+                    {
+                        Console.WriteLine("Enter name of character");
+                        string nameOfCharacter = Console.ReadLine();
+
+                        Character findedCharacter = GetCharacterByName(nameOfCharacter, characters);
+
+                        if (findedCharacter != null)
+                        {
+                            Console.WriteLine($"Name: {findedCharacter.Name}");
+                            Console.WriteLine($"Current health: {findedCharacter.CurrentHealth}");
+                            Console.WriteLine($"Max health: {findedCharacter.UpgradedFullHealth}");
+                            Console.WriteLine($"Damage: {findedCharacter.UpgradedDamage}");
+                            Console.WriteLine($"Currency: {findedCharacter.Currency}");
+                            Console.WriteLine($"Lvl: {findedCharacter.Lvl}");
+                            Console.WriteLine($"Xp: {findedCharacter.XP}");
+                            if (findedCharacter.IsAlive == true)
+                            {
+                                Console.WriteLine("Status: Alive");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Status: Dead");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("There is no characters yet");
+                    }
+                }
             }
         }
 
@@ -212,6 +247,7 @@
             Console.WriteLine("Enter 2 to damage someone");
             Console.WriteLine("Enter 3 to update lvls of characters");
             Console.WriteLine("Enter 4 to heal or revive");
+            Console.WriteLine("Enter 5 to see info about character");
         }
         static Character GetCharacterByName(string nameOfCharacter, List<Character> characters)
         {
