@@ -85,5 +85,19 @@
         {
             Console.WriteLine("Enter 1 to add new character");
         }
+        static Character GetCharacterByName(string nameOfCharacter, List<Character> characters)
+        {
+            Character findedCharacter = null;
+
+            foreach (Character character in characters)
+            {
+                if (character.Name == nameOfCharacter)
+                {
+                    findedCharacter = character;
+                }
+            }
+
+            return findedCharacter;
+        }
     }
 }
