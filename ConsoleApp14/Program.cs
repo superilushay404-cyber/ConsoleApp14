@@ -35,7 +35,7 @@
                         {
                             Console.WriteLine("Please input max health");
                             bool isMaxHealthParseSuccess = int.TryParse(Console.ReadLine(), out int maxHealth);
-                            
+
                             if (isMaxHealthParseSuccess)
                             {
                                 Console.WriteLine("Please input current health");
@@ -78,12 +78,65 @@
                         Console.WriteLine("Empty input");
                     }
                 }
+                else if (userInput == 2)
+                {
+                    if (characters.Count > 1)
+                    {
+                        Console.WriteLine("Input name of character which will do damage");
+                        string nameOfDamager = Console.ReadLine();
+                        var findedDamager = GetCharacterByName(nameOfDamager, characters);
+
+                        if (findedDamager != null && findedDamager.IsAlive == true)
+                        {
+                            Console.WriteLine("Enter name of character which will be damaged");
+                            string nameOfDamagedCharacter = Console.ReadLine();
+                            var findedDamagedCharacter = GetCharacterByName(nameOfDamagedCharacter, characters);
+
+                            if ( findedDamagedCharacter != null && findedDamagedCharacter.IsAlive == true)
+                            {
+                                if (findedDamagedCharacter.CurrentHealth > findedDamager.Damage)
+                                {
+                                    findedDamagedCharacter.CurrentHealth -= findedDamager.Damage;
+                                    Console.WriteLine("Success");
+                                }
+                                else if (findedDamagedCharacter.CurrentHealth <= findedDamager.Damage)
+                                {
+                                    findedDamagedCharacter.CurrentHealth = 0;
+                                    findedDamagedCharacter.IsAlive = false;
+
+                                    Console.WriteLine($"\"{findedDamagedCharacter.Name}\" has died after getting damaged");
+                                }
+                            }
+                            else if (findedDamagedCharacter == null)
+                            {
+                                Console.WriteLine($"\"{nameOfDamagedCharacter}\" is not exists");
+                            }
+                            else if (findedDamagedCharacter.IsAlive == false)
+                            {
+                                Console.WriteLine($"\"{nameOfDamagedCharacter}\" is dead so they cant get damage");
+                            }
+                        }
+                        else if (findedDamager == null)
+                        {
+                            Console.WriteLine($"\"{nameOfDamager}\" is not exists");
+                        }
+                        else if (findedDamager.IsAlive == false)
+                        {
+                            Console.WriteLine($"\"{nameOfDamager}\" is dead so they cant do damage");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Atleast 2 characters needed");
+                    }
+                }
             }
         }
 
         static void PrintInfo()
         {
             Console.WriteLine("Enter 1 to add new character");
+            Console.WriteLine("Enter 2 to damage someone");
         }
         static Character GetCharacterByName(string nameOfCharacter, List<Character> characters)
         {

@@ -24,5 +24,7 @@ namespace ConsoleApp14
         public int Lvl { get; set; }
 
         public int Currency { get; set; }
+
+        public bool IsAlive { get; set; } = true;
     }
 }
