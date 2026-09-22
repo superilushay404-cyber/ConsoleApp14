@@ -151,6 +151,42 @@
                         Console.WriteLine("There is no characters yet");
                     }
                 }
+                else if (userInput == 4)
+                {
+                    if (characters.Count > 0)
+                    {
+                        Console.WriteLine("Enter name of character to heal");
+                        string healingCharacterName = Console.ReadLine();
+
+                        Character findedHealingCharacter = GetCharacterByName(healingCharacterName, characters);
+
+                        if (findedHealingCharacter != null)
+                        {
+                            float healingCost = findedHealingCharacter.FullHealth / 10;
+                            float totalHealthAfterHeal = findedHealingCharacter.CurrentHealth += healingCost;
+
+                            if (totalHealthAfterHeal > findedHealingCharacter.FullHealth)
+                            {
+                                float realHeal = totalHealthAfterHeal - findedHealingCharacter.FullHealth;
+                                findedHealingCharacter.CurrentHealth = findedHealingCharacter.FullHealth;
+                                Console.WriteLine($"\"{findedHealingCharacter.Name}\" has fully healed (by {totalHealthAfterHeal / findedHealingCharacter.FullHealth}% or {realHeal})");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"\"{findedHealingCharacter.Name}\" has healed by 10% of max health ({healingCost})");
+                            }
+
+                            if (findedHealingCharacter.IsAlive == false)
+                            {
+                                findedHealingCharacter.IsAlive = true;
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine($"\"{healingCharacterName}\" is not exists");
+                        }
+                    }
+                }
             }
         }
 
@@ -159,6 +195,7 @@
             Console.WriteLine("Enter 1 to add new character");
             Console.WriteLine("Enter 2 to damage someone");
             Console.WriteLine("Enter 3 to update lvls of characters");
+            Console.WriteLine("Enetr 4 to heal or revive");
         }
         static Character GetCharacterByName(string nameOfCharacter, List<Character> characters)
         {
