@@ -4,26 +4,32 @@ namespace ConsoleApp14
 {
     internal class Character
     {
-        public Character(string name, float currentHealth, float fullHealth, float damage)
+        public Character(string name, float currentHealth, float startFullHealth, float startDamage)
         {
             Name = name;
             CurrentHealth = currentHealth;
-            FullHealth = fullHealth;
-            Damage = damage;
+            StartFullHealth = startFullHealth;
+            StartDamage = startDamage;
+            UpgradedFullHealth = startFullHealth;
+            UpgradedDamage = startDamage;
         }
         public string Name { get; set; }
 
         public float CurrentHealth { get; set; }
 
-        public float FullHealth { get; set; }
+        public float UpgradedFullHealth { get; set; }
+
+        public float StartFullHealth { get; set; }
 
         public int XP { get; set; }
 
-        public float Damage { get; set; }
+        public float StartDamage { get; set; }
+
+        public float UpgradedDamage { get; set; }
 
         public int Lvl { get; set; }
 
-        public int Currency { get; set; }
+        public float Currency { get; set; }
 
         public bool IsAlive { get; set; } = true;
     }

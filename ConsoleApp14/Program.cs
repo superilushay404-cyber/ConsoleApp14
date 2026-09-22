@@ -94,15 +94,16 @@
 
                             if ( findedDamagedCharacter != null && findedDamagedCharacter.IsAlive == true)
                             {
-                                if (findedDamagedCharacter.CurrentHealth > findedDamager.Damage)
+                                if (findedDamagedCharacter.CurrentHealth > findedDamager.UpgradedDamage)
                                 {
-                                    findedDamagedCharacter.CurrentHealth -= findedDamager.Damage;
-                                    findedDamager.XP += (int)findedDamager.Damage;
+                                    findedDamagedCharacter.CurrentHealth -= findedDamager.UpgradedDamage;
+                                    findedDamager.XP += (int)findedDamager.UpgradedDamage;
                                     Console.WriteLine("Success");
                                 }
-                                else if (findedDamagedCharacter.CurrentHealth <= findedDamager.Damage)
+                                else if (findedDamagedCharacter.CurrentHealth <= findedDamager.UpgradedDamage)
                                 {
                                     findedDamager.XP += (int)findedDamagedCharacter.CurrentHealth;
+                                    findedDamager.Currency += findedDamagedCharacter.CurrentHealth / 10;
                                     findedDamagedCharacter.CurrentHealth = 0;
                                     findedDamagedCharacter.IsAlive = false;
 
@@ -141,6 +142,13 @@
                             if (character.XP >= 100)
                             {
                                 character.Lvl = character.XP / 100;
+
+                                if (character.Lvl > 0)
+                                {
+                                    float percentOfInceareByLvl = character.Lvl + 100;
+                                    character.UpgradedDamage = character.StartDamage * percentOfInceareByLvl / 100;
+                                    character.UpgradedFullHealth = character.StartFullHealth * percentOfInceareByLvl / 100;
+                                }
                             }
                         }
 
@@ -160,20 +168,20 @@
 
                         Character findedHealingCharacter = GetCharacterByName(healingCharacterName, characters);
 
-                        if (findedHealingCharacter != null)
+                        if (findedHealingCharacter != null && findedHealingCharacter.CurrentHealth != findedHealingCharacter.UpgradedFullHealth)
                         {
-                            float healingCost = findedHealingCharacter.FullHealth / 10;
-                            float totalHealthAfterHeal = findedHealingCharacter.CurrentHealth += healingCost;
+                            float amountOfHeal = findedHealingCharacter.UpgradedFullHealth / 10;
+                            float totalHealthAfterHeal = findedHealingCharacter.CurrentHealth + amountOfHeal;
 
-                            if (totalHealthAfterHeal > findedHealingCharacter.FullHealth)
+                            if (totalHealthAfterHeal > findedHealingCharacter.UpgradedFullHealth)
                             {
-                                float realHeal = totalHealthAfterHeal - findedHealingCharacter.FullHealth;
-                                findedHealingCharacter.CurrentHealth = findedHealingCharacter.FullHealth;
-                                Console.WriteLine($"\"{findedHealingCharacter.Name}\" has fully healed (by {totalHealthAfterHeal / findedHealingCharacter.FullHealth}% or {realHeal})");
+                                float differenceBetweenFullAndCurrentHealth = findedHealingCharacter.UpgradedFullHealth - findedHealingCharacter.CurrentHealth;
+                                findedHealingCharacter.CurrentHealth = findedHealingCharacter.UpgradedFullHealth;
+                                Console.WriteLine($"\"{findedHealingCharacter.Name}\" has fully healed (by {findedHealingCharacter.UpgradedFullHealth / findedHealingCharacter.CurrentHealth}% or {differenceBetweenFullAndCurrentHealth})");
                             }
                             else
                             {
-                                Console.WriteLine($"\"{findedHealingCharacter.Name}\" has healed by 10% of max health ({healingCost})");
+                                Console.WriteLine($"\"{findedHealingCharacter.Name}\" has healed by 10% of max health ({amountOfHeal})");
                             }
 
                             if (findedHealingCharacter.IsAlive == false)
@@ -181,10 +189,18 @@
                                 findedHealingCharacter.IsAlive = true;
                             }
                         }
-                        else
+                        else if (findedHealingCharacter == null)
                         {
                             Console.WriteLine($"\"{healingCharacterName}\" is not exists");
                         }
+                        else if (findedHealingCharacter.CurrentHealth == findedHealingCharacter.UpgradedFullHealth)
+                        {
+                            Console.WriteLine($"\"{healingCharacterName}\" is already fully healed");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("There is no characters to heal");
                     }
                 }
             }
@@ -195,7 +211,7 @@
             Console.WriteLine("Enter 1 to add new character");
             Console.WriteLine("Enter 2 to damage someone");
             Console.WriteLine("Enter 3 to update lvls of characters");
-            Console.WriteLine("Enetr 4 to heal or revive");
+            Console.WriteLine("Enter 4 to heal or revive");
         }
         static Character GetCharacterByName(string nameOfCharacter, List<Character> characters)
         {
