@@ -34,17 +34,17 @@
                         if (!isThereDublicates)
                         {
                             Console.WriteLine("Please input max health");
-                            bool isMaxHealthParseSuccess = int.TryParse(Console.ReadLine(), out int maxHealth);
+                            bool isMaxHealthParseSuccess = float.TryParse(Console.ReadLine(), out float maxHealth);
 
                             if (isMaxHealthParseSuccess)
                             {
                                 Console.WriteLine("Please input current health");
-                                bool isParseCurrentHealthSuccess = int.TryParse(Console.ReadLine(), out int currentHealth);
+                                bool isParseCurrentHealthSuccess = float.TryParse(Console.ReadLine(), out float currentHealth);
 
                                 if (isParseCurrentHealthSuccess && maxHealth >= currentHealth)
                                 {
                                     Console.WriteLine("Please input damage");
-                                    bool isParseDamageSuccess = int.TryParse(Console.ReadLine(), out int damage);
+                                    bool isParseDamageSuccess = float.TryParse(Console.ReadLine(), out float damage);
 
                                     if (isParseDamageSuccess)
                                     {
@@ -130,6 +130,25 @@
                         Console.WriteLine("Atleast 2 characters needed");
                     }
                 }
+                else if (userInput == 3)
+                {
+                    if (characters.Count > 0)
+                    {
+                        foreach (Character character in characters)
+                        {
+                            if (character.XP >= 100)
+                            {
+                                character.Lvl = character.XP / 100;
+                            }
+                        }
+
+                        Console.WriteLine("Success");
+                    }
+                    else
+                    {
+                        Console.WriteLine("There is no characters yet");
+                    }
+                }
             }
         }
 
@@ -137,6 +156,7 @@
         {
             Console.WriteLine("Enter 1 to add new character");
             Console.WriteLine("Enter 2 to damage someone");
+            Console.WriteLine("Enter 3 to update lvls of characters");
         }
         static Character GetCharacterByName(string nameOfCharacter, List<Character> characters)
         {

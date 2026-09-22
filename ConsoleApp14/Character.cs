@@ -4,7 +4,7 @@ namespace ConsoleApp14
 {
     internal class Character
     {
-        public Character(string name, float currentHealth, int fullHealth, float damage)
+        public Character(string name, float currentHealth, float fullHealth, float damage)
         {
             Name = name;
             CurrentHealth = currentHealth;
