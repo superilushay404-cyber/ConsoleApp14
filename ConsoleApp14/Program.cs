@@ -234,7 +234,7 @@ namespace ConsoleApp14
                             Console.WriteLine($"Max health: {findedCharacter.UpgradedFullHealth}");
                             Console.WriteLine($"Damage: {findedCharacter.UpgradedDamage}");
                             Console.WriteLine($"Currency: {findedCharacter.Currency}");
-                            Console.WriteLine($"Lvl: {findedCharacter.Lvl}");
+                            Console.WriteLine($"Lvl: {findedCharacter.Lvl + 1}");
                             Console.WriteLine($"Xp: {findedCharacter.XP}");
                             if (findedCharacter.IsAlive == true)
                             {
@@ -251,6 +251,50 @@ namespace ConsoleApp14
                         Console.WriteLine("There is no characters yet");
                     }
                 }
+                else if (userInput == 6)
+                {
+                    if (characters.Count > 0)
+                    {
+                        Console.WriteLine("Enter name of character");
+                        string nameOfCharacter = Console.ReadLine();
+
+                        Character findedCharacter = GetCharacterByName(nameOfCharacter, characters);
+
+                        if (findedCharacter != null)
+                        {
+                            Console.WriteLine("How much xp you want to buy? 1 currency = 50 xp");
+                            bool isXpParseSuccess = int.TryParse(Console.ReadLine(), out int XpAmount);
+
+                            if (isXpParseSuccess && XpAmount > 0)
+                            {
+                                float priceOfXp = (float)XpAmount / 50;
+
+                                if (findedCharacter.Currency >= priceOfXp)
+                                {
+                                    findedCharacter.Currency -= priceOfXp;
+                                    findedCharacter.XP += XpAmount;
+                                    Console.WriteLine("Success");
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"Cant afford (you need {priceOfXp - findedCharacter.Currency} currency more)");
+                                }
+                            }
+                            else if (!isXpParseSuccess)
+                            {
+                                Console.WriteLine("Input is not a number");
+                            }
+                            else if (XpAmount < 1)
+                            {
+                                Console.WriteLine("You cant buy less than 1 xp");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine($"\"{nameOfCharacter} is not exists\"");
+                        }
+                    }
+                }
             }
         }
 
@@ -261,6 +305,7 @@ namespace ConsoleApp14
             Console.WriteLine("Enter 3 to update lvls of characters");
             Console.WriteLine("Enter 4 to heal or revive");
             Console.WriteLine("Enter 5 to see info about character");
+            Console.WriteLine("Enter 6 to spend currency on XP");
         }
         static Character GetCharacterByName(string nameOfCharacter, List<Character> characters)
         {
