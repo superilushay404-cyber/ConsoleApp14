@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace ConsoleApp14
@@ -13,6 +14,9 @@ namespace ConsoleApp14
             while (continueProgram)
             {
                 PrintInfo();
+                List<Character> updatedCharacters = AutoLevelUpgrade(characters);
+                characters = updatedCharacters;
+
                 int.TryParse(Console.ReadLine(), out int userInput);
 
                 if (userInput == 1)
@@ -36,10 +40,11 @@ namespace ConsoleApp14
                         }
                         if (!isThereDublicates)
                         {
+                            int numberLimit = 100000;
                             Console.WriteLine("Please input max health");
                             bool isMaxHealthParseSuccess = float.TryParse(Console.ReadLine(), out float maxHealth);
 
-                            if (isMaxHealthParseSuccess && maxHealth > 0)
+                            if (isMaxHealthParseSuccess && maxHealth > 0 && maxHealth < numberLimit)
                             {
                                 Console.WriteLine("Please input current health");
                                 bool isParseCurrentHealthSuccess = float.TryParse(Console.ReadLine(), out float currentHealth);
@@ -60,18 +65,18 @@ namespace ConsoleApp14
                                     {
                                         Console.WriteLine("Input is not a number");
                                     }
-                                    else if (damage <= 0)
+                                    else if (damage <= 0 || damage >= numberLimit)
                                     {
-                                        Console.WriteLine("Damage cant be 0 or lower");
+                                        Console.WriteLine("Damage cant be 0 (and lower) or 100000 and higher");
                                     }
                                 }
                                 else if (!isParseCurrentHealthSuccess)
                                 {
                                     Console.WriteLine("Input is not a number");
                                 }
-                                else if (currentHealth <= 0)
+                                else if (currentHealth <= 0 || currentHealth >= numberLimit)
                                 {
-                                    Console.WriteLine("Current health cant be 0 or lower");
+                                    Console.WriteLine("Current health cant be 0 (and lower) or 100000 and higher");
                                 }
                                 else if (maxHealth < currentHealth)
                                 {
@@ -82,9 +87,9 @@ namespace ConsoleApp14
                             {
                                 Console.WriteLine("Input is not a number");
                             }
-                            else if (maxHealth <= 0)
+                            else if (maxHealth <= 0 || maxHealth >= numberLimit)
                             {
-                                Console.WriteLine("Max health cant be 0 or lower");
+                                Console.WriteLine("Max health cant be 0 (and lower) or 100000 and higher");
                             }
                         }
                     }
@@ -107,7 +112,7 @@ namespace ConsoleApp14
                             string nameOfDamagedCharacter = Console.ReadLine();
                             var findedDamagedCharacter = GetCharacterByName(nameOfDamagedCharacter, characters);
 
-                            if ( findedDamagedCharacter != null && findedDamagedCharacter.IsAlive == true)
+                            if ( findedDamagedCharacter != null && findedDamagedCharacter.IsAlive == true && findedDamagedCharacter != findedDamager)
                             {
                                 if (findedDamagedCharacter.CurrentHealth > findedDamager.UpgradedDamage)
                                 {
@@ -133,6 +138,10 @@ namespace ConsoleApp14
                             {
                                 Console.WriteLine($"\"{nameOfDamagedCharacter}\" is dead so they cant get damage");
                             }
+                            else if (findedDamager == findedDamagedCharacter)
+                            {
+                                Console.WriteLine("Character cant damage themselfs");
+                            }
                         }
                         else if (findedDamager == null)
                         {
@@ -152,32 +161,6 @@ namespace ConsoleApp14
                 {
                     if (characters.Count > 0)
                     {
-                        foreach (Character character in characters)
-                        {
-                            if (character.XP >= 100)
-                            {
-                                character.Lvl = character.XP / 100;
-
-                                if (character.Lvl > 0)
-                                {
-                                    float percentOfInceareByLvl = character.Lvl + 100;
-                                    character.UpgradedDamage = character.StartDamage * percentOfInceareByLvl / 100;
-                                    character.UpgradedFullHealth = character.StartFullHealth * percentOfInceareByLvl / 100;
-                                }
-                            }
-                        }
-
-                        Console.WriteLine("Success");
-                    }
-                    else
-                    {
-                        Console.WriteLine("There is no characters yet");
-                    }
-                }
-                else if (userInput == 4)
-                {
-                    if (characters.Count > 0)
-                    {
                         Console.WriteLine("Enter name of character to heal");
                         string healingCharacterName = Console.ReadLine();
 
@@ -192,11 +175,12 @@ namespace ConsoleApp14
                             {
                                 float differenceBetweenFullAndCurrentHealth = findedHealingCharacter.UpgradedFullHealth - findedHealingCharacter.CurrentHealth;
                                 findedHealingCharacter.CurrentHealth = findedHealingCharacter.UpgradedFullHealth;
-                                Console.WriteLine($"\"{findedHealingCharacter.Name}\" has fully healed (by {findedHealingCharacter.UpgradedFullHealth / findedHealingCharacter.CurrentHealth}% or {differenceBetweenFullAndCurrentHealth})");
+                                Console.WriteLine($"\"{findedHealingCharacter.Name}\" has fully healed (by {differenceBetweenFullAndCurrentHealth})");
                             }
                             else
                             {
                                 Console.WriteLine($"\"{findedHealingCharacter.Name}\" has healed by 10% of max health ({amountOfHeal})");
+                                findedHealingCharacter.CurrentHealth += amountOfHeal;
                             }
 
                             if (findedHealingCharacter.IsAlive == false)
@@ -218,7 +202,7 @@ namespace ConsoleApp14
                         Console.WriteLine("There is no characters to heal");
                     }
                 }
-                else if (userInput == 5)
+                else if (userInput == 4)
                 {
                     if (characters.Count > 0)
                     {
@@ -251,7 +235,7 @@ namespace ConsoleApp14
                         Console.WriteLine("There is no characters yet");
                     }
                 }
-                else if (userInput == 6)
+                else if (userInput == 5)
                 {
                     if (characters.Count > 0)
                     {
@@ -295,6 +279,10 @@ namespace ConsoleApp14
                         }
                     }
                 }
+                else
+                {
+                    Console.WriteLine("This input is not supported");
+                }
             }
         }
 
@@ -302,11 +290,11 @@ namespace ConsoleApp14
         {
             Console.WriteLine("Enter 1 to add new character");
             Console.WriteLine("Enter 2 to damage someone");
-            Console.WriteLine("Enter 3 to update lvls of characters");
-            Console.WriteLine("Enter 4 to heal or revive");
-            Console.WriteLine("Enter 5 to see info about character");
-            Console.WriteLine("Enter 6 to spend currency on XP");
+            Console.WriteLine("Enter 3 to heal or revive");
+            Console.WriteLine("Enter 4 to see info about character");
+            Console.WriteLine("Enter 5 to spend currency on XP");
         }
+
         static Character GetCharacterByName(string nameOfCharacter, List<Character> characters)
         {
             Character findedCharacter = null;
@@ -320,6 +308,18 @@ namespace ConsoleApp14
             }
 
             return findedCharacter;
+        }
+
+        static List<Character> AutoLevelUpgrade(List<Character> characters)
+        {
+            foreach (Character character in characters)
+            {
+                if (character.XP >= 100)
+                {
+                    character.Lvl = character.XP / 100;
+                }
+            }
+            return characters;
         }
     }
 }
