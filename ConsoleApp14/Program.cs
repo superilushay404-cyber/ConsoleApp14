@@ -279,6 +279,44 @@ namespace ConsoleApp14
                         }
                     }
                 }
+                else if (userInput == 6)
+                {
+                    if (characters.Count > 0)
+                    {
+                        Console.WriteLine("Enter name of character to full heal heal");
+                        string healingCharacterName = Console.ReadLine();
+
+                        Character findedHealingCharacter = GetCharacterByName(healingCharacterName, characters);
+
+                        if (findedHealingCharacter != null && findedHealingCharacter.CurrentHealth < findedHealingCharacter.UpgradedFullHealth)
+                        {
+                            Console.WriteLine();
+                            Console.Write("Before heal ");
+
+                            for (int i = 3; i > 0; i--)
+                            {
+                                Console.WriteLine($"{i}...");
+                                ConsoleKeyInfo muteUser = Console.ReadKey(true);
+                            }
+
+                            findedHealingCharacter.CurrentHealth = findedHealingCharacter.UpgradedFullHealth;
+                            findedHealingCharacter.IsAlive = true;
+                            Console.WriteLine("Success");
+                        }
+                        else if (findedHealingCharacter == null)
+                        {
+                            Console.WriteLine($"\"{healingCharacterName}\" is not exists");
+                        }
+                        else if (findedHealingCharacter.CurrentHealth == findedHealingCharacter.UpgradedFullHealth)
+                        {
+                            Console.WriteLine($"\"{findedHealingCharacter.Name}\" is already fully healed");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("There is no characters yet");
+                    }
+                }
                 else
                 {
                     Console.WriteLine("This input is not supported");
@@ -293,6 +331,7 @@ namespace ConsoleApp14
             Console.WriteLine("Enter 3 to heal or revive");
             Console.WriteLine("Enter 4 to see info about character");
             Console.WriteLine("Enter 5 to spend currency on XP");
+            Console.WriteLine("Enter 6 to fully heal");
         }
 
         static Character GetCharacterByName(string nameOfCharacter, List<Character> characters)
