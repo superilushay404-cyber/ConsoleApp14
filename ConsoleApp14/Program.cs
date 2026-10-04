@@ -317,6 +317,11 @@ namespace ConsoleApp14
                         Console.WriteLine("There is no characters yet");
                     }
                 }
+                else if (userInput == 7)
+                {
+                    Console.WriteLine("Goodbye!");
+                    continueProgram = false;
+                }
                 else
                 {
                     Console.WriteLine("This input is not supported");
@@ -332,6 +337,7 @@ namespace ConsoleApp14
             Console.WriteLine("Enter 4 to see info about character");
             Console.WriteLine("Enter 5 to spend currency on XP");
             Console.WriteLine("Enter 6 to fully heal");
+            Console.WriteLine("Enter 7 to end program");
         }
 
         static Character GetCharacterByName(string nameOfCharacter, List<Character> characters)
